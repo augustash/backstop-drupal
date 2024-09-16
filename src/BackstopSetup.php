@@ -19,6 +19,13 @@ class BackstopSetup {
   private static $configPath = __DIR__ . '/../../../../tests/backstop.json';
 
   /**
+   * Path to config file.
+   *
+   * @var string
+   */
+  private static $newConfigPath = __DIR__ . '/../assets/backstop.json';
+
+  /**
    * The tests root.
    *
    * @var string
@@ -41,24 +48,27 @@ class BackstopSetup {
   public static function postPackageInstall(Event $event) {
 
     $fileSystem = new Filesystem();
-    if ($fileSystem->exists(static::$configPath)) {
+    if ($fileSystem->exists(static::$newConfigPath)) {
       $io = $event->getIO();
-      $config = json_decode(file_get_contents(static::$configPath), true);
+      // Load the new config file from the assets directory.
+      $configContents = file_get_contents(static::$newConfigPath);
+      $config = json_decode($configContents, true);
 
       $localDdevUrl = $io->ask('<info>Local DDEV URL?</info> (e.g., http://local.ddev.site): ' . "\n > ");
       $liveSiteUrl = $io->ask('<info>Live Site URL?</info> (e.g., https://livesite.com): ' . "\n > ");
 
-      // Update the URLs in the 'scenarios' array.
+      // Replace URLs in all 'scenarios'.
       foreach ($config['scenarios'] as &$scenario) {
-        $scenario['url'] = str_replace('http://local.ddev.site', $localDdevUrl, $scenario['url']);
-        $scenario['referenceUrl'] = str_replace('https://livesite.com', $liveSiteUrl, $scenario['referenceUrl']);
+          $scenario['url'] = $localDdevUrl . str_replace('http://local.ddev.site', '', $scenario['url']);
+          $scenario['referenceUrl'] = $liveSiteUrl . str_replace('https://livesite.com', '', $scenario['referenceUrl']);
       }
 
+      // Now replace the original file at $configPath with the updated config.
       try {
-        $fileSystem->dumpFile(static::$configPath, json_encode($config, JSON_PRETTY_PRINT));
-        $io->write('<info>Config updated successfully.</info>');
+          $fileSystem->dumpFile(static::$configPath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          $io->write('<info>Original config file successfully replaced with updated config.</info>');
       } catch (\Exception $e) {
-          $io->write('<error>Failed to update config: ' . $e->getMessage() . '</error>');
+          $io->write('<error>Failed to replace original config file: ' . $e->getMessage() . '</error>');
       }
     } else {
       $io = $event->getIO();
