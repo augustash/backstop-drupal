@@ -59,16 +59,16 @@ class BackstopSetup {
 
       // Replace URLs in all 'scenarios'.
       foreach ($config['scenarios'] as &$scenario) {
-          $scenario['url'] = $localDdevUrl . str_replace('http://local.ddev.site', '', $scenario['url']);
-          $scenario['referenceUrl'] = $liveSiteUrl . str_replace('https://livesite.com', '', $scenario['referenceUrl']);
+        $scenario['url'] = $localDdevUrl . str_replace('http://local.ddev.site', '', $scenario['url']);
+        $scenario['referenceUrl'] = $liveSiteUrl . str_replace('https://livesite.com', '', $scenario['referenceUrl']);
       }
 
       // Now replace the original file at $configPath with the updated config.
       try {
-          $fileSystem->dumpFile(static::$configPath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-          $io->write('<info>Original config file successfully replaced with updated config.</info>');
+        $fileSystem->dumpFile(static::$configPath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $io->write('<info>Original config file successfully replaced with updated config.</info>');
       } catch (\Exception $e) {
-          $io->write('<error>Failed to replace original config file: ' . $e->getMessage() . '</error>');
+        $io->write('<error>Failed to replace original config file: ' . $e->getMessage() . '</error>');
       }
     } else {
       $io = $event->getIO();
