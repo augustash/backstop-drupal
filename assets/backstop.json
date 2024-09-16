@@ -1,0 +1,83 @@
+{
+  "id": "Default Test",
+  "viewports": [
+    {
+      "label": "small",
+      "width": 320,
+      "height": 1000
+    },
+    {
+      "label": "medium",
+      "width": 640,
+      "height": 1000
+    },
+    {
+      "label": "large",
+      "width": 1024,
+      "height": 1000
+    },
+    {
+      "label": "xlarge",
+      "width": 1920,
+      "height": 1000
+    }
+  ],
+  "onBeforeScript": "puppet/onBefore.js",
+  "scenarioDefaults": {
+    "delay": 3000,
+    "hideSelectors": [
+      ".captcha"
+    ],
+    "removeSelectors": [
+      ".eu-cookie-compliance-banner"
+    ],
+    "misMatchThreshold": 0.1,
+    "requireSameDimensions": true
+  },
+  "scenarios": [
+    {
+      "label": "node:system:Homepage",
+      "url": "http://metro.ddev.site/node/1",
+      "referenceUrl": "https://metroairports.org/node/1"
+    },
+    {
+      "label": "node:system:Demo",
+      "url": "http://metro.ddev.site/node/2",
+      "referenceUrl": "https://metroairports.org/node/2"
+    },
+    {
+      "label": "node:system:Error 403 - Access Denied",
+      "url": "http://metro.ddev.site/node/3",
+      "referenceUrl": "https://metroairports.org/node/3"
+    },
+    {
+      "label": "node:system:Error 404 - Page Not Found",
+      "url": "http://metro.ddev.site/node/4",
+      "referenceUrl": "https://metroairports.org/node/4"
+    },
+    {
+      "label": "node:system:Contact Us",
+      "url": "http://metro.ddev.site/node/5",
+      "referenceUrl": "https://metroairports.org/node/5"
+    }
+  ],
+  "paths": {
+    "bitmaps_reference": "backstop_data/bitmaps_reference",
+    "bitmaps_test": "backstop_data/bitmaps_test",
+    "html_report": "backstop_data/html_report",
+    "ci_report": "backstop_data/ci_report"
+  },
+  "report": [
+    "browser"
+  ],
+  "engine": "puppeteer",
+  "engineOptions": {
+    "args": [
+      "--no-sandbox"
+    ]
+  },
+  "asyncCaptureLimit": 5,
+  "asyncCompareLimit": 50,
+  "debug": false,
+  "debugWindow": false
+}

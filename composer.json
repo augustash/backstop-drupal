@@ -1,0 +1,14 @@
+{
+    "name": "augustash/backstop-js",
+    "description": "AugustAsh BackstopJS VRT setup",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7"
+    },
+    "autoload": {
+      "psr-4": {
+        "Augustash\\": "src/"
+      }
+    }
+}
