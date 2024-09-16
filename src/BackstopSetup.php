@@ -43,7 +43,7 @@ class BackstopSetup {
     $fileSystem = new Filesystem();
     if ($fileSystem->exists(static::$configPath)) {
       $io = $event->getIO();
-      $config = Yaml::parseFile(static::$configPath);
+      $config = json_decode(file_get_contents(static::$configPath), true);
 
       $localDdevUrl = $io->ask('<info>Local DDEV URL?</info>:' . "\n > ");
       $liveSiteUrl = $io->ask('<info>Live Site URL?</info>:' . "\n > ");
@@ -53,8 +53,8 @@ class BackstopSetup {
 
       // config.yaml.
       try {
-        $fileSystem->dumpFile(static::$configPath, Yaml::dump($config, 2, 2));
-        $io->info('<info>Config.yaml updated.</info>');
+        $fileSystem->dumpFile(static::$configPath, json_encode($config, JSON_PRETTY_PRINT));
+        $io->info('<info>Config updated.</info>');
       }
       catch (\Error $e) {
         $io->error('<error>' . $e->getMessage() . '</error>');
