@@ -45,20 +45,24 @@ class BackstopSetup {
       $io = $event->getIO();
       $config = json_decode(file_get_contents(static::$configPath), true);
 
-      $localDdevUrl = $io->ask('<info>Local DDEV URL?</info>:' . "\n > ");
-      $liveSiteUrl = $io->ask('<info>Live Site URL?</info>:' . "\n > ");
+      $localDdevUrl = $io->ask('<info>Local DDEV URL?</info> (e.g., http://local.ddev.site): ' . "\n > ");
+      $liveSiteUrl = $io->ask('<info>Live Site URL?</info> (e.g., https://livesite.com): ' . "\n > ");
 
-      $config['local'] = $localDdevUrl;
-      $config['live'] = $liveSiteUrl;
+      // Update the URLs in the 'scenarios' array.
+      foreach ($config['scenarios'] as &$scenario) {
+        $scenario['url'] = str_replace('http://local.ddev.site', $localDdevUrl, $scenario['url']);
+        $scenario['referenceUrl'] = str_replace('https://livesite.com', $liveSiteUrl, $scenario['referenceUrl']);
+      }
 
-      // config.yaml.
       try {
         $fileSystem->dumpFile(static::$configPath, json_encode($config, JSON_PRETTY_PRINT));
-        $io->info('<info>Config updated.</info>');
+        $io->write('<info>Config updated successfully.</info>');
+      } catch (\Exception $e) {
+          $io->write('<error>Failed to update config: ' . $e->getMessage() . '</error>');
       }
-      catch (\Error $e) {
-        $io->error('<error>' . $e->getMessage() . '</error>');
-      }
+    } else {
+      $io = $event->getIO();
+      $io->write('<error>Config file not found at ' . static::$configPath . '.</error>');
     }
   }
 
