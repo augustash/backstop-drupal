@@ -71,7 +71,7 @@ class BackstopSetup {
         $additionalNodes = explode(',', $additionalNodes);
         foreach ($additionalNodes as $node) {
           $config['scenarios'][] = [
-            'label' => 'node:system:Node ' . $node,
+            'label' => 'node:Custom ' . $node,
             'url' => $localDdevUrl . '/node/' . $node,
             'referenceUrl' => $liveSiteUrl . '/node/' . $node,
           ];
