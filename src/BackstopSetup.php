@@ -57,6 +57,8 @@ class BackstopSetup {
       $localDdevUrl = $io->ask('<info>Local DDEV URL?</info> (e.g., http://local.ddev.site): ' . "\n > ");
       $liveSiteUrl = $io->ask('<info>Live Site URL?</info> (e.g., https://livesite.com): ' . "\n > ");
       $additionalNodes = $io->ask('<info>Additional nodes? (Default is node 1-5, but you can pass more as a comma separated list)</info> (e.g., ["6,7,8"]): ' . "\n > ");
+      $hideSelectors = $io->ask('<info>Do you have additional selectors to hide? (Default is .captcha, but you can pass more as a comma separated list)</info> (e.g., ["#block-block-1"]): ' . "\n > ");
+      $removeSelectors = $io->ask('<info>Do you have additional selectors to remove? (Default is .eu-cookie-compliance-banner, but you can pass more as a comma separated list)</info> (e.g., ["#block-block-1"]): ' . "\n > ");
 
       // Replace URLs in all 'scenarios'.
       foreach ($config['scenarios'] as &$scenario) {
@@ -74,6 +76,20 @@ class BackstopSetup {
             'referenceUrl' => $liveSiteUrl . '/node/' . $node,
           ];
         }
+      }
+
+      // If there are hideSelectors passed, we need to add them to
+      // the list in $config['scenarioDefaults']['hideSelectors']
+      if ($hideSelectors) {
+        $hideSelectors = explode(',', $hideSelectors);
+        $config['scenarioDefaults']['hideSelectors'] = array_merge($config['scenarioDefaults']['hideSelectors'], $hideSelectors);
+      }
+
+      // If there are removeSelectors passed, we need to add them to
+      // the list in $config['scenarioDefaults']['removeSelectors']
+      if ($removeSelectors) {
+        $removeSelectors = explode(',', $removeSelectors);
+        $config['scenarioDefaults']['removeSelectors'] = array_merge($config['scenarioDefaults']['removeSelectors'], $removeSelectors);
       }
 
       // Now replace the original file at $configPath with the updated config.
