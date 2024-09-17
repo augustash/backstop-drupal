@@ -25,7 +25,7 @@ Note that it is a good idea to remove reference and test images before committin
 ----
 ## Options
 - When running the `composer backstop-setup` command you will be prompted for a few input items. <br/>
-- The two required options will be your local DDEV url to test with along with the live url to reference.<br/>
-- By default the test with run against nodes 1-5, but you will be prompted to pass any additional you may want to test.<br/>
-- By default the `.captcha` is hidden from the tests so it will be rendered with a `visibility: hidden` option, you can also pass additional items if needed.<br/>
-- By default the `.eu-cookie-compliance-banner` is removed from the tests and these will be removed from the DOM, you can also pass additional items to this as needed.
+  - The two required options will be your local DDEV url to test with along with the live url to reference.<br/>
+  - By default the test with run against nodes 1-5, but you will be prompted to pass any additional you may want to test.<br/>
+  - By default the `.captcha` is hidden from the tests so it will be rendered with a `visibility: hidden` option, you can also pass additional items if needed.<br/>
+  - By default the `.eu-cookie-compliance-banner` is removed from the tests and these will be removed from the DOM, you can also pass additional items to this as needed.
