@@ -56,11 +56,24 @@ class BackstopSetup {
 
       $localDdevUrl = $io->ask('<info>Local DDEV URL?</info> (e.g., http://local.ddev.site): ' . "\n > ");
       $liveSiteUrl = $io->ask('<info>Live Site URL?</info> (e.g., https://livesite.com): ' . "\n > ");
+      $additionalNodes = $io->ask('<info>Additional nodes? (Default is node 1-5, but you can pass more as a comma separated list)</info> (e.g., ["6,7,8"]): ' . "\n > ");
 
       // Replace URLs in all 'scenarios'.
       foreach ($config['scenarios'] as &$scenario) {
         $scenario['url'] = $localDdevUrl . str_replace('http://local.ddev.site', '', $scenario['url']);
         $scenario['referenceUrl'] = $liveSiteUrl . str_replace('https://livesite.com', '', $scenario['referenceUrl']);
+      }
+
+      // If there are additionalNodes passed, we need to add new scenarios for each node
+      if ($additionalNodes) {
+        $additionalNodes = explode(',', $additionalNodes);
+        foreach ($additionalNodes as $node) {
+          $config['scenarios'][] = [
+            'label' => 'node:system:Node ' . $node,
+            'url' => $localDdevUrl . '/node/' . $node,
+            'referenceUrl' => $liveSiteUrl . '/node/' . $node,
+          ];
+        }
       }
 
       // Now replace the original file at $configPath with the updated config.
